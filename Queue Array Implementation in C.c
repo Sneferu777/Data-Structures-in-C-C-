@@ -13,16 +13,17 @@ void EnQueue(int x){
     queue[++rear] = x;
 }
 void DeQueue(){
-    if(front == rear){
+    if(front == rear || front > rear){
         puts("Queue Underflow!");return;
     }
     front++;
+    if(front > rear) front = rear = -1;
 }
 void DisplayQueue(){
-    if(front == rear){
+    if(front == rear || front > rear){
         puts("Queue Underflow : (empty)");return;
     }
-    for(int i = 0; i <= rear; i++)
+    for(int i = front; i <= rear; i++)
         printf("%d ->", queue[i]);
     puts("NULL");
 }
