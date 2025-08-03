@@ -1,37 +1,52 @@
-// Online C compiler to run C program online
 #include <stdio.h>
 #include <stdlib.h>
-struct node{
-    int data ; 
-    struct node * next;
-};
-void CreateQueue(struct node** head, int data){
-    struct node* newNode = malloc(sizeof(struct node));
-    newNode->data = data;
-    newNode->next = NULL;
+
+typedef struct node{
+    int data;
+    struct node* next;
+}node;
+typedef struct queue{
+    node * front;
+    node* rear;
+}queue;
+
+queue* initQ(){
+    queue* q = malloc(sizeof(queue));
+    q->front = q->rear = NULL;
+    return q;
+}
+void enq(queue* q, int value){
+    node* tmp = malloc(sizeof(node));
+    tmp->data = value;
+    tmp->next = NULL;
+    if(q->rear == NULL){
+        q->front = q->rear = tmp;
+        return;
+    }
+    q->rear->next = tmp;
+    q->rear = tmp;
     
-    if(*head == NULL) *head = newNode;
-    else{
-        struct node* current = *head;
-        while(current->next != NULL){
-            current = current->next;
-        }
-        current->next = newNode;
-    }
 }
-void displayQ(struct node* head){
-    while(head != NULL){
-        printf("%d ->", head->data);
-        head = head->next;
+int dq(queue* q ){
+    if(q->front == NULL){
+        puts("Queue underflow.");return -1;
     }
-    puts("NULL");
+    node* tmp = q->front;
+    int value = tmp->data;
+    q->front = q->front->next;
+    if(q->front == NULL)
+        q->rear = NULL;
+    free(tmp);
+    return value;
 }
 
-
-int main() {
-    struct node * head = NULL;
-    CreateQueue(&head,10);CreateQueue(&head,100);CreateQueue(&head,1000);
-    displayQ(head);
-
+int main(){
+     queue * q = NULL;
+     q = initQ();
+     enq(q,10);enq(q,20);enq(q,133);enq(q,50);
+     int value = dq(q);
+     printf("Dequeued value is  : %d", value);
+     value = dq(q);
+     printf("Dequeued value is  : %d", value);
     return 0;
 }
